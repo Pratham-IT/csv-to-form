@@ -50,7 +50,7 @@ export const useCsvPaster = (config) => {
                 if(!copiedValue) return;
                 cellData[cellIndex] = {cellIndex : cellIndex, value : copiedValue};
                 cellObj[cell.dataset.header] = copiedValue;
-                isWatched = isWatched || (config.watcher(cell) && oldHandler(config.watcher, cellIndex));
+                isWatched = isWatched || (config.watcher(cell) || oldHandler(config.watcher, cellIndex));
             });
             const rowIndex = currentRow.rowIndex+idx;
             cellObj["rowIndex"] = rowIndex;
