@@ -31,9 +31,10 @@ export const useCsvPaster = (config) => {
         let oldHandler = (callBack, cellIndex) => true;
         if(config.handleOld){
             const cells = Array.from(config.elem.rows).filter(x => x.rowIndex >= currentRow.rowIndex)
-                .reduce((cells, row) => (cells.concat(row.cells)), []);
+                .reduce((cells, row) => (cells.concat(...row.cells)), []);
             oldHandler = (callBack, cellIndex) => {
-                return cells.filter(x => x.cellIndex == cellIndex).some(callBack);
+                const elems = cells.filter(x => x.cellIndex === cellIndex);
+                return elems.some(callBack);
             }
         }
         const headers = Array.from(config.elem.tHead.rows[0].cells)

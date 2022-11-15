@@ -1,0 +1,21 @@
+{
+  "name": "csv-to-form",
+  "version": "1.0.0",
+  "description": "Bulk paste on tabular form",
+  "main": "csv-to-form.js",
+  "type": "module",
+  "keywords": ["csv-to-form"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pratham-IT/csv-to-form.git"
+  },
+  "author": "Pratham It",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pratham-IT/csv-to-form/issues"
+  },
+  "homepage": "https://github.com/Pratham-IT/csv-to-form#readme"
+}

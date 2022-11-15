@@ -20,7 +20,7 @@
   </thead>
   <tbody>
   <tr>
-    <td><input type="text" name="a"></td>
+    <td class="watch"><input  type="text" name="a"></td>
     <td>
       <select name="b">
         <option value="">Select ...</option>
@@ -35,18 +35,19 @@
       <input type="radio" name="d" value="Female">Female
 
     </td>
-    <td><input type="text" name="e"></td>
+    <td class="skip-paste"><input  type="text" name="e"></td>
     <td><input type="text" name="f"></td>
   </tr>
   </tbody>
 </table>
 
 <script type="module">
-  import {useCsvPaster} from "./package/csv-to-form.js";
+  import {useCsvPaster} from "./csv-to-form.js";
 
   const tableElem = document.getElementById('excel-table')
   useCsvPaster({
-    elem : tableElem
+    elem : tableElem,
+    handleOld: true
   })
 
   document.addEventListener("DOMContentLoaded", () => {
