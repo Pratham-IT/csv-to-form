@@ -40,7 +40,6 @@ export const useCsvPaster = (config) => {
             .filter(cell => cell.cellIndex >= currentCell.cellIndex && config.cellFilter(cell) && oldHandler(config.cellFilter, cell.cellIndex))
             .map(x => ({cellIndex : x.cellIndex, cell : x}));
         rawRowData.forEach((row, idx) => {
-            if(idx == rawRowData.length -1) return;
             let cellRawData = row.split('\t');
             let cellData = [];
             let cellObj = {};
@@ -73,9 +72,9 @@ export const useCsvPaster = (config) => {
             const optionElems = Array.from(pasteElem.querySelectorAll('option'));
             input = optionElems.find(elem => elem.textContent === input)?.value;
         }
-        // @ts-ignore
         pasteElem.value = input;
         pasteElem.dispatchEvent(new Event('change', {bubbles: true}));
+        pasteElem.dispatchEvent(new Event('input', {bubbles: true}));
     }
 
     const notifyAdjustableRow = async (paste) => {
@@ -101,6 +100,7 @@ export const useCsvPaster = (config) => {
         await handlePaste(paste);
         const watchedData = paste.filter(x => x.isWatched).map(x => x.cellObj);
         await dispatchEvent('pasteComplete', watchedData);
+        config.onComplete();
     });
 
     const getStartingRowIndex = (data) => data[0].rowIndex;
