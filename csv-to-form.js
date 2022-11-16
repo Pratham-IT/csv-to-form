@@ -2,7 +2,7 @@ const configOptions = {
     elem : null,
     watcher: (elem) => elem.classList.contains('watch'),
     cellFilter: (elem) => !elem.classList.contains('skip-paste'),
-    onComplete : () => {},
+    onCellPasteComplete : () => {},
     handleOld : false
 }
 
@@ -76,6 +76,7 @@ export const useCsvPaster = (config) => {
         pasteElem.value = input;
         pasteElem.dispatchEvent(new Event('change', {bubbles: true}));
         pasteElem.dispatchEvent(new Event('input', {bubbles: true}));
+        config.onCellPasteComplete(pasteElem);
     }
 
     const notifyAdjustableRow = async (paste) => {
@@ -101,7 +102,6 @@ export const useCsvPaster = (config) => {
         await handlePaste(paste);
         const watchedData = paste.filter(x => x.isWatched).map(x => x.cellObj);
         await dispatchEvent('pasteComplete', watchedData);
-        config.onComplete();
     });
 
     const getStartingRowIndex = (data) => data[0].rowIndex;
