@@ -6,13 +6,10 @@ Demo : https://csv-to-form.netlify.app/
 
 ## Installation
 
-> npm
-
    ```npm
    npm i "csv-to-form"
    ```
 
-> Yarn
 
    ```yarn
    yarn add "csv-to-form"
@@ -39,9 +36,9 @@ window.addEventListener("DOMContentLoaded", (ev) => {
 ```js
 {
     elem : HTMLTableElement, //elem where paste listener will be added
-    watcher : Function // use to fetch needed paste cell data,
-    cellFilter : Function // use to filter cell for paste,
-    onCellPasteComplete : Function // function to execute after each paste on cell
+    watcher : (elem) => {} // use to fetch needed paste cell data,
+    cellFilter : (elem) => {} // use to filter cell for paste,
+    onCellPasteComplete : (elem) => {} // function to execute after each paste on cell
 }
 
 ```
