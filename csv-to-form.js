@@ -52,11 +52,12 @@ export const useCsvPaster = (config) => {
             let cellObj = {};
             let isWatched = false;
             headers.forEach(({cell, cellIndex}, idx) =>{
+                let isCellWatched = config.watcher(cell) || oldHandler(config.watcher, cellIndex);
                 let copiedValue = cellRawData[idx]
                 if(!copiedValue) return;
-                cellData[cellIndex] = {cellIndex : cellIndex, value : copiedValue};
+                cellData[cellIndex] = {cellIndex : cellIndex, value : copiedValue, isWatched : isCellWatched};
                 cellObj[cell.dataset.header] = copiedValue;
-                isWatched = isWatched || (config.watcher(cell) && oldHandler(config.watcher, cellIndex));
+                isWatched = isWatched || isCellWatched;
             });
             const rowIndex = currentRow.rowIndex+idx;
             cellObj["rowIndex"] = rowIndex;
@@ -65,23 +66,26 @@ export const useCsvPaster = (config) => {
         return data;
     }
 
-    const setInput = (cellElem, input) => {
+    const setInput = (cellElem, cellData) => {
+        let value = cellData.value;
         let pasteElem = cellElem.querySelector('input, textarea, select');
         if (pasteElem instanceof HTMLInputElement && pasteElem.type == 'radio') {
             const radioElems = Array.from(pasteElem.querySelectorAll('input[type="radio"]'));
-            pasteElem = radioElems.find(elem => elem.closest('label').textContent === input);
+            pasteElem = radioElems.find(elem => elem.closest('label').textContent === value);
             pasteElem.checked = true;
         }
         if (pasteElem instanceof HTMLInputElement && pasteElem.type == 'checkbox') {
-            pasteElem.checked = (input == 'true' || input == '1' || input == 'on' || input == 'yes');
+            pasteElem.checked = (value == 'true' || value == '1' || value == 'on' || value == 'yes');
         }
         if (pasteElem instanceof HTMLSelectElement) {
             const optionElems = Array.from(pasteElem.querySelectorAll('option'));
-            input = optionElems.find(elem => elem.textContent === input)?.value;
+            value = optionElems.find(elem => elem.textContent === value)?.value;
         }
-        pasteElem.value = input;
-        pasteElem.dispatchEvent(new Event('change', {bubbles: true}));
-        pasteElem.dispatchEvent(new Event('input', {bubbles: true}));
+        pasteElem.value = value;
+        if(!cellData.isWatched){
+            pasteElem.dispatchEvent(new Event('change', {bubbles: true}));
+            pasteElem.dispatchEvent(new Event('input', {bubbles: true}));
+        }
         config.onCellPasteComplete(pasteElem);
     }
 
@@ -95,7 +99,7 @@ export const useCsvPaster = (config) => {
     const handlePaste = async (data) => {
         const rows = Array.from(config.elem.rows);
         data.forEach(rowData => rowData.cellData.forEach(cell => {
-            setInput(rows[rowData.rowIndex].cells[cell.cellIndex], cell.value);
+            setInput(rows[rowData.rowIndex].cells[cell.cellIndex], cell);
         }));
     }
 
