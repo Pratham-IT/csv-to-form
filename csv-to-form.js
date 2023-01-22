@@ -27,7 +27,13 @@ export const useCsvPaster = (config) => {
         if (!raw.includes("\t") && !raw.includes("\n")) {
             return data;
         }
-        let rawRowData = raw.split("\r\n");
+        let rawRowData = [];
+        if(raw.includes("\r\n")){
+            rawRowData = raw.split("\r\n");
+        }
+        else {
+            rawRowData = raw.split("\n");
+        }
         let oldHandler = (callBack, cellIndex) => true;
         if(config.handleOld){
             const cells = Array.from(config.elem.rows).filter(x => x.rowIndex >= currentRow.rowIndex)
